@@ -27,7 +27,7 @@ jobs:
     - name: Install dependencies
 
       run: |
-        pip install muggle_ocr -i https://pypi.tuna.tsinghua.edu.cn/simple
+        pip install muggle_ocr -i https://pypi.doubanio.com/simple
         pip install requests
     - name: Update paper list
       run: |
