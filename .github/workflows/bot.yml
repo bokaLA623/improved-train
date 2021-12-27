@@ -11,10 +11,10 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@master
-    - name: Set up Python 3.6.4
+    - name: Set up Python 3.6
       uses: actions/setup-python@master
       with:
-        python-version: 3.6.4
+        python-version: 3.6
     #- name: Set up Python
      # uses: actions/setup-python@v2
 
