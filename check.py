@@ -88,9 +88,10 @@ def check(sfz,xm):
         print(f"信息正确:{sfz} : {xm}")
         with open("success","a+") as f:
             f.write(f"信息正确:{sfz} : {xm}\n")
+        return True
     elif result==-1:
         print(f"信息错误:{sfz} : {xm}")
-        
+        return False
 #sfz=input("输入身份证:")        
 #xm=input("输入姓名:")
 xm="王成付"
@@ -100,5 +101,28 @@ sfz="532123198812092811"
 #    print("初检:身份证格式错误！")
 #else:
 #    check(sfz,xm)
-if(check_id(sfz)):
-      check(sfz,xm)
+former="33082120040322"
+lis="0123456789"
+o="0123456789X"
+m="13579"
+f="02468"
+xm="刘彦阳"
+is_male:True
+for i in lis:
+    for j in lis:
+        if(is_male):
+            for k in m:
+                for l in o:
+                    _all=former+str(i)+str(j)+str(k)+str(l)
+                    if(check_id(_all)):
+                        result=check(_all,xm)
+                        if(result):
+                            break
+        else:
+            for k in f:
+                for l in o:
+                    _all=former+str(i)+str(j)+str(k)+str(l)
+                    if(check_id(_all)):
+                        result=check(_all,xm)
+                        if(result):
+                            break
